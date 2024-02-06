@@ -15,4 +15,4 @@
 **ID:** a100827
 
 **Fotografia:**
-![Fotografia do aluno](./myfoto.jpg)
+![Fotografia do aluno](./myfoto.jpeg)
