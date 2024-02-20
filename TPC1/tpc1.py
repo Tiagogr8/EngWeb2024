@@ -76,6 +76,7 @@ for filename in os.listdir(xml_directory):
             html += "<p>" + text + "</p>\n"
         html += "</div>\n"
 
+        #imagens
         html += "<div>\n"
         for figura in root.findall("./corpo/figura"):
             imagem = figura.find("imagem").attrib['path']
@@ -83,9 +84,18 @@ for filename in os.listdir(xml_directory):
             html += f"<div style='margin-bottom: 20px;'>\n<figure>\n<img src=\"{imagem}\" alt=\"{legenda}\" style=\"max-width: 50%; height: auto;\">\n<figcaption>{legenda}</figcaption>\n</figure>\n</div>\n"
         html += "</div>\n"
 
-        html += "<div>\n"
+        # Imagens Atuais
+        atual_directory = "atual"
+        html += "<h2 style='margin-top: 5rem;'>Imagens Atuais: </h2>"
+
+        for imagem in os.listdir(atual_directory):
+            if imagem.startswith(f"{str(int(numero))}-"):
+                caminho_img = os.path.join("../atual", imagem)
+                html += f"<div style='margin-bottom: 20px;'>\n<figure>\n<img src=\"{caminho_img}\" style=\"max-width: 40%; height: auto;\">\n\n</figure>\n</div>\n"
+
         #### Casas
-        html += "<h2>Lista de Casas</h2>\n<table border='1'>\n<tr><th>Número</th><th>Enfiteuta</th><th>Foro</th><th>Descrição</th></tr>\n"
+        html += "<div>\n"
+        html += "<h2 style='margin-top: 4rem;'>Lista de Casas</h2>\n<table border='1'>\n<tr><th>Número</th><th>Enfiteuta</th><th>Foro</th><th>Descrição</th></tr>\n"
         for casa in root.findall("./corpo/lista-casas/casa"):
             numero_casa = casa.find("número").text if casa.find("número") is not None else ""
             enfiteuta = casa.find("enfiteuta").text if casa.find("enfiteuta") is not None else ""
@@ -109,46 +119,54 @@ for filename in os.listdir(xml_directory):
         html += "</div>\n"
 
 
-        imagens_rua = []
-        numero_rua_formatado = str(int(numero))
-
-        atual_directory = "atual"
-        for imagem in os.listdir(atual_directory):
-            if imagem.startswith(f"{numero_rua_formatado}-"):
-                caminho_img = os.path.join("../atual", imagem)
-                html += f"<div style='margin-bottom: 20px;'>\n<figure>\n<img src=\"{caminho_img}\" style=\"max-width: 50%; height: auto;\">\n\n</figure>\n</div>\n"
-
+        # Voltar ao index
         html += "<div>\n"
         html += "<h4><a href='../index.html' style='text-decoration: none; color: black;'>Voltar ao Índice</a></h4>\n"
         html += "</div>\n"
 
         html += "</body>"
         html += "</html>"
-        html_filename = os.path.splitext(os.path.basename(xml_file))[0] + ".html"
+        html_filename = nome + ".html"
         html_output_path = os.path.join("html", html_filename)
         with open(html_output_path, "w", encoding="utf-8") as html_file:
             html_file.write(html)
         html_file.close()
 
+###########################################################
+######################    Index    ########################
+###########################################################
 
-#### Index ####
 html_files = []
 html_directory = "html"
 for filename in os.listdir(html_directory):
     if filename.endswith(".html"):
         html_files.append(filename)
 
+tree = ET.parse("manifest.xml")
+root = tree.getroot()
+
+title = root.find("./meta/title").text
+date = root.find("./meta/date").text
+author_id = root.find("./meta/author/id").text
+author_name = root.find("./meta/author/nome").text
+uc_sigla = root.find("./meta/uc/sigla").text
+uc_name = root.find("./meta/uc/nome").text
+resumo = [p.text for p in root.findall("./resumo/p")]
+resultados = "\n".join([p.text for p in root.findall("./resumo/p")])
 index_html = f"""
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Índice de Ruas</title>
+    <title>{title}</title>
     <style>
         body {{
             font-family: Arial, sans-serif;
-        }}c
+        }}
         h1 {{
             color: black;
+        }}
+        p {{
+            margin-bottom: 10px;
         }}
         ul {{
             list-style-type: none;
@@ -158,23 +176,35 @@ index_html = f"""
             margin-bottom: 10px;
         }}
         a {{
-            text-decoration: none; /* Remove o sublinhado padrão */
-            color: black; /* Muda a cor do texto para preto */
-            transition: color 0.3s; /* Adiciona uma transição suave na mudança de cor */
+            text-decoration: none;
+            color: black;
+            transition: color 0.3s;
         }}
         a:hover {{
-            color: #0056b3; /* Muda a cor do texto quando o mouse está sobre o link */
+            color: #0056b3;
         }}
     </style>
 </head>
 <body>
-    <h1>Índice de Ruas</h1>
+    <h1>{title}</h1>
+    <p><strong>Data:</strong> {date}</p>
+    <p><strong>Autor:</strong> {author_name} ({author_id})</p>
+    <p><strong>Unidade Curricular:</strong> {uc_name} ({uc_sigla})</p>
+    <p><strong>Resumo:</strong></p>
+    <p>{"<br>".join(resumo)}</p>
+    <h3 style = 'margin-top : 2rem'>Resultados Obtidos (Índice das Ruas ordenadas alfabeticamente): </h3>
     <ul>
 """
 
+ruas = []
 for html_file in html_files:
-    rua_name = os.path.splitext(html_file)[0]
-    index_html += f"        <li><a href='html/{html_file}'>{rua_name}</a></li>\n"
+    rua_name = os.path.splitext(html_file)[0].strip()  
+    ruas.append(rua_name)
+
+# Ordenar ruas em ordem alfabética
+ruas.sort()
+for rua_name in ruas:
+    index_html += f"<li><a href='html/{rua_name}.html'>{rua_name}</a></li>\n"
 
 index_html += """
     </ul>
