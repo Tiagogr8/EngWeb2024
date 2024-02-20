@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doc>
+    <meta>
+        <title>TPC1: Mapa das Ruas de Braga</title>
+        <date>2024-02-06</date>
+        <author>
+            <id>a100827</id>
+            <nome>Tiago Granja Rodrigues</nome>
+        </author>
+        <uc>
+            <sigla>EW2024</sigla>
+            <nome>Engenharia Web</nome>
+        </uc>
+    </meta>
+    <resumo>
+        <p>Neste trabalho, utilizou-se o material fornecido pelo docente, ficheiros XML com a informação de 60 ruas de Braga, fotos atuais (associadas a uma determinada vista), e fotos dos esquiços desenhados no séc. XVIII das mesmas ruas, para produzir um website onde se pode consultar e navegar nesta estrutura.</p>
+        <p>O site apresenta uma página principal com a lista de ruas ordenada alfabeticamente. </p>
+        <p>Clicando numa das ruas acede-se à página individual da rua onde se pode consultar toda a sua informação. Nesta página há também um link para regressar à página principal.</p>
+    </resumo>
+</doc>
