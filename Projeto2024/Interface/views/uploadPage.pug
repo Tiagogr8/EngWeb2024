@@ -1,0 +1,24 @@
+extends layout
+
+block content
+
+    .w3-card-4
+        header.w3-container.w3-blue(style="margin-bottom: 10px; display: flex; ")
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick="window.location.href=localStorage.getItem('lastPage') || '/inquiricoes'") 
+                h1(style="margin: 0;") Upload ZIP File
+    .w3-container
+            if successMessage
+                .w3-panel.w3-green
+                    h3= successMessage
+            if errorMessage
+                .w3-panel.w3-red
+                    h3= errorMessage
+            form(action='/inquiricoes/upload', method='post', enctype='multipart/form-data')
+                .field(style="display: flex; align-items: center;")
+                    label.label(style="margin-right: 10px;") File
+                    .control
+                        input.input(type='file', name='ficheiro')
+                .field
+                    .control
+                        button(type="submit", class="button w3-button w3-blue w3-round-large", style="border-radius: 10px; margin-top:10px") Upload

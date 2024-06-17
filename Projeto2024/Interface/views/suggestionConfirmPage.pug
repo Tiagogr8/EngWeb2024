@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue
+            h2 Confirmação de Sugestão
+
+        .w3-container
+            p A sua sugestão foi enviada com sucesso!
+            a(href=`/inquiricoes/${inquiricaoId}`)
+                button.w3-btn.w3-blue.w3-mb-2(style="margin-top:10px; border-radius: 10px;") Voltar

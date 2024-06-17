@@ -1,0 +1,62 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick="window.location.href=document.referrer")
+                h2 Sugerir Alteração para Inquirição
+
+        form.w3-container(method="POST" action=`/inquiricoes/${inquiricao._id}/suggest`)
+            fieldset
+                label Nome *
+                input.w3-input.w3-round(type="text" name="Name" value=inquiricao.Name required)
+
+                label Data inicial de Produção: *
+                input.w3-input.w3-round(type="date" name="UnitDateInitial" value=inquiricao.UnitDateInitial required)
+
+                label A data introduzida está verificada? *
+                div(style="display: inline-block; margin-left: 10px;")
+                    input(type="radio" name="UnitDateInitialCertainty" value="true" checked=inquiricao.UnitDateInitialCertainty == true required)
+                    label(for="datesYes") Sim
+                div(style="display: inline-block; margin-left: 10px;")
+                    input(type="radio" name="UnitDateInitialCertainty" value="false" checked=inquiricao.UnitDateInitialCertainty == false required)
+                    label(for="datesNo") Não
+
+                label Data final de Produção: *
+                input.w3-input.w3-round(type="date" name="UnitDateFinal" value=inquiricao.UnitDateFinal required)
+
+                label A data introduzida está verificada? *
+                div(style="display: inline-block; margin-left: 10px;")
+                    input(type="radio" name="UnitDateFinalCertainty" value="true" checked=inquiricao.UnitDateFinalCertainty == true required)
+                    label(for="datesYes") Sim
+                div(style="display: inline-block; margin-left: 10px;")
+                    input(type="radio" name="UnitDateFinalCertainty" value="false" checked=inquiricao.UnitDateFinalCertainty == false required)
+                    label(for="datesNo") Não
+
+                label Repositório: *
+                input.w3-input.w3-round(type="text" name="Repository" value=inquiricao.Repository required)
+
+                label Conteúdo: *
+                input.w3-input.w3-round(type="text" name="ScopeContent" value=inquiricao.ScopeContent required)
+
+                label Localidade:
+                input.w3-input.w3-round(type="text" name="Localidade" value=inquiricao.Localidade)
+
+                label Localização atual:
+                input.w3-input.w3-round(type="text" name="PhysLoc" value=inquiricao.PhysLoc)
+
+                label Localização antiga:
+                input.w3-input.w3-round(type="text" name="PreviousLoc" value=inquiricao.PreviousLoc)
+
+                label Características físicas e requisitos técnicos:
+                input.w3-input.w3-round(type="text" name="PhysTech" value=inquiricao.PhysTech)
+
+                label Inquirições relacionadas:
+                - var str = inquiricao.Parentesco.join(',')
+                input.w3-input.w3-round(type="text" name="RelatedMaterial" value=str)
+
+                label Idioma:
+                input.w3-input.w3-round(type="text" name="LangMaterial" value=inquiricao.LangMaterial)
+
+            button.w3-btn.w3-blue.w3-mb-2(style="margin-top:10px;margin-right: 10px; border-radius: 10px;",type="submit") Sugerir Alteração

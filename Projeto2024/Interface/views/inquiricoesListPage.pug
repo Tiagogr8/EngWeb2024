@@ -1,0 +1,99 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue(style="margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;")
+            h1(style="flex-grow: 1;")
+                span Inquirições de genere
+            .profile-container(style="display: flex; align-items: center;")
+                if user.username === 'admin'
+                    a.w3-button.w3-deep-orange.w3-round-large(href="/inquiricoes/database", style="margin-right: 30px; border-radius: 10px; display: flex; align-items: center;")
+                        span Gestão BD
+                a.w3-button.w3-green.w3-round-large(href="/inquiricoes/myInquiricoes", style="margin-right: 30px; border-radius: 10px; display: flex; align-items: center;")
+                    span Minhas Inquirições
+                a.w3-button.w3-red.w3-round-large(href="/logout", style="margin-right: 30px; border-radius: 10px; display: flex; align-items: center;")
+                    span Logout
+                    img(src="/images/logout.png" alt="Logout" style="width: 20px; height: 20px; margin-left: 10px;")
+                a(href="/profile")
+                    img(src="/images/PersonCircle.png" alt="Profile" style="width: 50px; height: 50px; cursor: pointer;")
+
+        form(action="/inquiricoes", method="GET", style="display: inline-block; margin-left: 20px; margin-right: 10px;")
+            input.w3-input.w3-border(style="width: 200px; display: inline-block; border-radius: 10px;", type="text", name="nome", placeholder="Procurar por nome", value=nome)
+
+            .input-container(style="display: inline-block; margin-left: 15px;")
+                input.w3-input.w3-border#localidade(style="width: 150px; border-radius: 10px;", type="text", name="localidade", placeholder="Localidade", value=localidade)
+            
+            .input-container(style="display: inline-block; margin-left: 15px;")
+                label(for="dateInicial") Data Inicial
+                input.w3-input.w3-border#dateInicial(style="width: 150px; border-radius: 10px;", type="date", name="dateInicial", placeholder="Start Date", value=dateInicial)
+            
+            .input-container(style="display: inline-block; margin-left: 15px;")
+                label(for="dateFinal") Data Final
+                input.w3-input.w3-border#dateFinal(style="width: 150px; border-radius: 10px;", type="date", name="dateFinal", placeholder="End Date", value=dateFinal)
+
+            .input-container(style="display: inline-block; margin-left: 15px; vertical-align: top;")
+                label(for="sort") Ordenar por:
+                select.w3-select(name="sort", style="width: 150px; display: block; margin-top: 5px; border-radius: 10px;")
+                    option(value="", selected=(sort == '')) Selecione
+                    option(value="nome-asc", selected=(sort == 'nome-asc')) Nome (A-Z)
+                    option(value="nome-desc", selected=(sort == 'nome-desc')) Nome (Z-A)
+                    option(value="date-asc", selected=(sort == 'date-asc')) Data (Crescente)
+                    option(value="date-desc", selected=(sort == 'date-desc')) Data (Decrescente)
+            
+            button(type="submit", style="border: none; background: none; padding: 0;")
+                img(src="/images/lupa.jpg" alt="Search" style="width: 40px; height: 40px; border-radius:50%; margin-left:5px;cursor: pointer;")
+        a.w3-button.w3-blue.w3-round-large(href="/inquiricoes", style="display: inline-block; margin-left: 10px; border-radius: 10px;") Clear Filters
+        select.w3-select(name="limit", onchange="window.location.href=this.value", style="display: inline-block; margin-left: 10px; width:80px; border-radius:10px;")
+            option(value=`/inquiricoes?limit=5&page=${current}${nome ? '&nome=' + nome : ''}${localidade ? '&localidade=' + localidade : ''}${dateInicial ? '&dateInicial=' + dateInicial : ''}${dateFinal ? '&dateFinal=' + dateFinal : ''}${sort ? '&sort=' + sort : ''}`, selected=(limit == 5)) 5
+            option(value=`/inquiricoes?limit=10&page=${current}${nome ? '&nome=' + nome : ''}${localidade ? '&localidade=' + localidade : ''}${dateInicial ? '&dateInicial=' + dateInicial : ''}${dateFinal ? '&dateFinal=' + dateFinal : ''}${sort ? '&sort=' + sort : ''}`, selected=(limit == 10)) 10
+            option(value=`/inquiricoes?limit=20&page=${current}${nome ? '&nome=' + nome : ''}${localidade ? '&localidade=' + localidade : ''}${dateInicial ? '&dateInicial=' + dateInicial : ''}${dateFinal ? '&dateFinal=' + dateFinal : ''}${sort ? '&sort=' + sort : ''}`, selected=(limit == 20)) 20
+            option(value=`/inquiricoes?limit=50&page=${current}${nome ? '&nome=' + nome : ''}${localidade ? '&localidade=' + localidade : ''}${dateInicial ? '&dateInicial=' + dateInicial : ''}${dateFinal ? '&dateFinal=' + dateFinal : ''}${sort ? '&sort=' + sort : ''}`, selected=(limit == 50)) 50
+            option(value=`/inquiricoes?limit=Tudo&page=${current}${nome ? '&nome=' + nome : ''}${localidade ? '&localidade=' + localidade : ''}${dateInicial ? '&dateInicial=' + dateInicial : ''}${dateFinal ? '&dateFinal=' + dateFinal : ''}${sort ? '&sort=' + sort : ''}`, selected=(limit == 'Tudo')) Tudo
+
+        div(style="margin-right: 20px; float: right; display: inline-block; width: auto;")
+            a.w3-button.w3-blue.w3-round-large(href="/inquiricoes/upload", style="display: block; margin-bottom: 10px; border-radius: 10px;") Upload de Inquirições
+            a.w3-button.w3-blue.w3-round-large(href="/inquiricoes/add", style="display: block; margin-bottom: 10px; border-radius: 10px;") Adicionar Inquirição
+
+        .w3-container(style="margin-top:30px;")
+            table.w3-table-all
+                tr
+                    th Id
+                    th Data Produção Inicial
+                    th Data Produção Final
+                    th Título
+                each inquiricao in lInquiricoes
+                    tr
+                        td
+                            a(href=`/inquiricoes/${inquiricao._id}`, onclick="localStorage.setItem('lastPage', window.location.href);")= inquiricao._id
+                        td= inquiricao.UnitDateInitial
+                        td= inquiricao.UnitDateFinal
+                        td= "Inquirição de genere de " + inquiricao.Name
+
+        .w3-center
+            .w3-bar
+                if current > 1
+                    a.w3-button.w3-blue.w3-round-large(href=`/inquiricoes?page=${parseInt(current) - 1}&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") « Anterior
+                else
+                    a.w3-button.w3-disabled.w3-round-large(href="#", style="border-radius: 10px;") « Anterior
+
+                if current > 2
+                    a.w3-button.w3-round-large(href=`/inquiricoes?page=1&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") 1
+                    if current > 3
+                        span ...
+
+                each num in [current - 1, current, current + 1]
+                    if num > 0 && num <= pages
+                        if num == current
+                            a.w3-button.w3-blue.w3-round-large(href=`/inquiricoes?page=${num}&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") #{num}
+                        else
+                            a.w3-button.w3-round-large(href=`/inquiricoes?page=${num}&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") #{num}
+
+                if current < pages - 1
+                    if current < pages - 2
+                        span ...
+                    a.w3-button.w3-round-large(href=`/inquiricoes?page=${pages}&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") #{pages}
+
+                if current < pages
+                    a.w3-button.w3-blue.w3-round-large(href=`/inquiricoes?page=${parseInt(current) + 1}&nome=${nome}&dateInicial=${dateInicial}&dateFinal=${dateFinal}&sort=${sort}&limit=${limit}`, style="border-radius: 10px;") Próximo »
+                else
+                    a.w3-button.w3-disabled.w3-round-large(href="#", style="border-radius: 10px;") Próximo »

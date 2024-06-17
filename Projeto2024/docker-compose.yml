@@ -1,0 +1,37 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./API
+      dockerfile: DOCKERFILE
+    ports:
+      - "7777:7777"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/EngWeb2024
+
+  interface:
+    build:
+      context: ./Interface
+      dockerfile: DOCKERFILE
+    ports:
+      - "7778:7778"
+    depends_on:
+      - api
+    volumes:
+      - ./dataset:/usr/src/app/dataset
+      - ./Interface/uploads:/usr/src/app/Interface/uploads
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    depends_on:
+      - mongo-seed
+
+  mongo-seed:
+    image: mongo:latest
+    volumes:
+      - ./dataset/db.json:/db.json
+    command: mongoimport --host mongodb -d EngWeb2024 -c inquiricoes --type json --file /db.json --jsonArray

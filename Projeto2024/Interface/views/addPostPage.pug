@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick="window.location.href=document.referrer")
+                h2 Adicionar Post à inquirição
+
+        form.w3-container(method="POST" action=`/inquiricoes/${inquiricao._id}/addPost`)
+            fieldset
+                input(type="hidden" name="username" value=user.username)
+                label Comentário: *
+                textarea.w3-input.w3-round(name="descricao" required)
+
+            button.w3-btn.w3-blue.w3-mb-2(style="margin-top:10px;margin-right: 10px; border-radius: 10px;",type="submit") Adicionar Post

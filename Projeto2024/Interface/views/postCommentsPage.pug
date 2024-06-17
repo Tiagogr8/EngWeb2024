@@ -1,0 +1,21 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick=`window.location.href='/inquiricoes/${post.idInquiricao}/posts'`)
+                h2 Post de #{post.username} - #{new Date(post.createdAt).toLocaleString()}
+
+        .w3-container
+            h2 #{post.descricao}
+
+            each comment in comments
+                .w3-container.w3-padding-small
+                    p 
+                        b #{comment.username} #{new Date(comment.createdAt).toLocaleString()}:
+                        | #{comment.comentario}
+
+            form(method="POST", action=`/inquiricoes/posts/${post._id}/comments`)
+                textarea.w3-input.w3-round(name="comentario" required placeholder="Escreva um comentário...")
+                button.w3-button.w3-blue.w3-round(style="margin-top: 10px;") Comentar

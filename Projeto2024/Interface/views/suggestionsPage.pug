@@ -1,0 +1,146 @@
+extends layout
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue
+            div(style="display: flex; align-items: center;")
+                a(href=`/inquiricoes/${inquiricao._id}`)
+                    img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;")
+                h2 Sugestões para Inquirição #{inquiricao.Name}
+
+        .w3-container
+            if suggestions.length > 0
+                each suggestion, index in suggestions
+                    .suggestion-block
+                        h3(style="background-color: orange; padding: 10px; border-radius: 5px;") Sugestão de #{suggestion.suggestedBy} em #{new Date(suggestion.suggestedAt).toLocaleString()}
+                        .suggestion-content
+                            .current
+                                h4 Estado Atual
+                                ul.w3-ul.w3-card-4(style="width:100%")
+                                    if inquiricao.Name
+                                        li 
+                                            b Nome:
+                                            | #{inquiricao.Name}
+                                    if inquiricao.UnitDateInitial
+                                        li 
+                                            b Data Inicial:
+                                            | #{inquiricao.UnitDateInitial}
+                                    if inquiricao.UnitDateFinal
+                                        li 
+                                            b Data Final:
+                                            | #{inquiricao.UnitDateFinal}
+                                    if inquiricao.UnitDateInitialCertainty
+                                        li 
+                                            b Data Inicial Confirmada:
+                                            | #{inquiricao.UnitDateInitialCertainty}
+                                    if inquiricao.UnitDateFinalCertainty
+                                        li 
+                                            b Data Final Confirmada:
+                                            | #{inquiricao.UnitDateFinalCertainty}
+                                    if inquiricao.Repository
+                                        li 
+                                            b Repositório:
+                                            | #{inquiricao.Repository}
+                                    if inquiricao.ScopeContent
+                                        li 
+                                            b Conteúdo:
+                                            | #{inquiricao.ScopeContent}
+                                    if inquiricao.Localidade
+                                        li 
+                                            b Localidade:
+                                            | #{inquiricao.Localidade}
+                                    if inquiricao.PhysLoc
+                                        li 
+                                            b Localização Atual:
+                                            | #{inquiricao.PhysLoc}
+                                    if inquiricao.PreviousLoc
+                                        li 
+                                            b Localização Anterior:
+                                            | #{inquiricao.PreviousLoc}
+                                    if inquiricao.PhysTech
+                                        li 
+                                            b Características Físicas:
+                                            | #{inquiricao.PhysTech}
+                                    if inquiricao.Parentesco
+                                        li  
+                                            b Inquirições relacionadas:
+                                            ul.w3-ul(style="width:100%")
+                                                each rel in inquiricao.Parentesco
+                                                    - var splitParent = rel.split(' - ')
+                                                    - var name = splitParent[0]
+                                                    - var id = splitParent[1]
+                                                    li
+                                                    a(href=`/inquiricoes/${id}`)= name
+                                    if inquiricao.LangMaterial
+                                        li 
+                                            b Idioma:
+                                            | #{inquiricao.LangMaterial}
+                            .proposed
+                                h4 Sugestão Proposta
+                                ul.w3-ul.w3-card-4(style="width:100%")
+                                    if suggestion.Name
+                                        li 
+                                            b Nome:
+                                            | #{suggestion.Name}
+                                    if suggestion.UnitDateInitial
+                                        li 
+                                            b Data Inicial:
+                                            | #{suggestion.UnitDateInitial}
+                                    if suggestion.UnitDateFinal
+                                        li 
+                                            b Data Final:
+                                            | #{suggestion.UnitDateFinal}
+                                    if suggestion.UnitDateInitialCertainty
+                                        li 
+                                            b Data Inicial Confirmada:
+                                            | #{suggestion.UnitDateInitialCertainty}
+                                    if suggestion.UnitDateFinalCertainty
+                                        li 
+                                            b Data Final Confirmada:
+                                            | #{suggestion.UnitDateFinalCertainty}
+                                    if suggestion.Repository
+                                        li 
+                                            b Repositório:
+                                            | #{suggestion.Repository}
+                                    if suggestion.ScopeContent
+                                        li 
+                                            b Conteúdo:
+                                            | #{suggestion.ScopeContent}
+                                    if suggestion.PhysLoc
+                                        li 
+                                            b Localização Atual:
+                                            | #{suggestion.PhysLoc}
+                                    if suggestion.PreviousLoc
+                                        li 
+                                            b Localização Anterior:
+                                            | #{suggestion.PreviousLoc}
+                                    if suggestion.PhysTech
+                                        li 
+                                            b Características Físicas:
+                                            | #{suggestion.PhysTech}
+                                    if suggestion.Parentesco
+                                        li  
+                                            b Inquirições relacionadas:
+                                            ul.w3-ul(style="width:100%")
+                                                each rel in suggestion.Parentesco
+                                                    - var splitParent = rel.split(' - ')
+                                                    - var name = splitParent[0]
+                                                    - var id = splitParent[1]
+                                                    li
+                                                    a(href=`/inquiricoes/${id}`)= name
+                                    if suggestion.LangMaterial
+                                        li 
+                                            b Idioma:
+                                            | #{suggestion.LangMaterial}
+                            .actions(style="display: flex; margin-top:10px;gap: 10px;")
+                                form(method="POST", action=`/inquiricoes/suggestion/${suggestion._id}/status`)
+                                    input(type="hidden", name="status", value="accepted")
+                                    input(type="hidden", name="inquiricaoId", value=suggestion.inquiricaoId)
+                                    button.w3-button.w3-green(style = "border-radius: 10px;", type="submit") Aceitar
+                                form(method="POST", action=`/inquiricoes/suggestion/${suggestion._id}/status`)
+                                    input(type="hidden", name="status", value="rejected")
+                                    button.w3-button.w3-red(style = "border-radius: 10px;", type="submit") Rejeitar
+                    if index < suggestions.length - 1
+                        hr(style="margin: 20px 0;")
+            else
+                p Nenhuma sugestão recebida.

@@ -1,0 +1,86 @@
+extends layout 
+
+block content
+    .w3-card-4
+        header.w3-container.w3-blue(style="margin-bottom: 10px; display: flex; ")
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick="window.location.href=localStorage.getItem('lastPage') || '/inquiricoes'") 
+                h1(style="margin: 0;") Inquirição de genere de #{inquiricao.Name}
+
+        .w3-container 
+            ul.w3-ul.w3-card-4(style="width:100%") 
+                if inquiricao._id
+                    li 
+                        b ID: 
+                        | #{inquiricao._id}
+                if inquiricao.Name
+                    li 
+                        b Nome: 
+                        | #{inquiricao.Name}
+                if inquiricao.UnitDateInitial && inquiricao.UnitDateFinal
+                    li 
+                        b Datas de Produção: 
+                        if inquiricao.UnitDateInitialCertainty && inquiricao.UnitDateFinalCertainty 
+                            | #{inquiricao.UnitDateInitial} a #{inquiricao.UnitDateFinal}
+                        else if inquiricao.UnitDateInitialCertainty
+                            | #{inquiricao.UnitDateInitial} a #{inquiricao.UnitDateFinal}?
+                        else if inquiricao.UnitDateFinalCertainty
+                            | #{inquiricao.UnitDateInitial}? a #{inquiricao.UnitDateFinal}
+                        else 
+                            | #{inquiricao.UnitDateInitial}? a #{inquiricao.UnitDateFinal}?
+                if inquiricao.Repository 
+                    li 
+                        b Repositório: 
+                        | #{inquiricao.Repository}
+                if inquiricao.ScopeContent
+                    li 
+                        b Conteúdo: 
+                        | #{inquiricao.ScopeContent}
+                if inquiricao.Localidade 
+                    li 
+                        b Localidade: 
+                        | #{inquiricao.Localidade}
+                if inquiricao.PhysLoc
+                    li  
+                        b Localização atual: 
+                        | #{inquiricao.PhysLoc}
+                if inquiricao.PreviousLoc
+                    li  
+                        b Localização antiga: 
+                        | #{inquiricao.PreviousLoc}
+                if inquiricao.PhysTech
+                    li  
+                        b Características físicas e requisitos técnicos: 
+                        | #{inquiricao.PhysTech}
+                if inquiricao.Parentesco
+                    li  
+                        b Inquirições relacionadas:
+                        ul.w3-ul(style="width:100%")
+                            each rel in inquiricao.Parentesco
+                                - var splitParent = rel.split(' - ')
+                                - var name = splitParent[0]
+                                - var id = splitParent[1]
+                                li
+                                a(href=`/inquiricoes/${id}`)= name
+                if inquiricao.LangMaterial
+                    li  
+                        b Idioma: 
+                        | #{inquiricao.LangMaterial}
+        .w3-container(style="margin-top: 20px;")
+            a.button.w3-button.w3-blue.w3-round-large(style="margin-right: 10px; border-radius: 10px;",href=`/inquiricoes/${inquiricao._id}/pdf`)
+                | Download
+            if user.level === 'admin' || user.username === inquiricao.Creator
+                a.button.w3-button.w3-blue.w3-round-large(style="margin-right: 10px; border-radius: 10px;",href=`/inquiricoes/edit/${inquiricao._id}`)
+                    | EDITAR
+                a.button.w3-button.w3-red.w3-round-large(style="margin-right: 10px; border-radius: 10px;",href=`/inquiricoes/delete/${inquiricao._id}`)
+                    | APAGAR
+                if hasSuggestions
+                    a.button.w3-button.w3-yellow.w3-round-large(style="border-radius: 10px;",href=`/inquiricoes/${inquiricao._id}/suggestions`)
+                        | Ver Sugestões
+            else
+                a.button.w3-button.w3-orange.w3-round-large(style="margin-right: 10px; border-radius: 10px;",href=`/inquiricoes/${inquiricao._id}/suggest`)
+                    | Sugerir Alteração
+                a.button.w3-button.w3-green.w3-round-large(style="margin-right: 10px; border-radius: 10px;", href=`/inquiricoes/${inquiricao._id}/addPost`)
+                    | Adicionar Post
+                a.button.w3-button.w3-purple.w3-round-large(style="border-radius: 10px;", href=`/inquiricoes/${inquiricao._id}/posts`)
+                    | Ver Posts

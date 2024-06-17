@@ -1,0 +1,31 @@
+extends layout
+
+block content
+
+    head
+        title Registo
+        link(rel="stylesheet", href="/stylesheets/auth.css")
+    body
+        .login-container
+            img(src="/images/PersonCircle.png")
+            
+            form(action="/register", method="POST")
+                
+                
+                input(type="text", id="name", name="name", placeholder="Nome", required)
+                
+                input(type="text", id="username", name="username", placeholder="Username", required)
+                
+                input(type="email", id="email", name="email", placeholder="Email", required)
+                
+                input(type="password", id="password", name="password", placeholder="Password", required)
+                
+                button(type="submit") Registar
+            if error
+                    p.error(style="color: red")= error
+            .register-link-container
+                p 
+                    | Já possui uma conta? 
+                    a(href="/login", class="register-link") Login
+            
+                

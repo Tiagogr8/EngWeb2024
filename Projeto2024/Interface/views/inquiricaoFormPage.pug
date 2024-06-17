@@ -1,0 +1,65 @@
+extends layout 
+
+block content 
+    .w3-card-4 
+        header.w3-container.w3-blue
+            div(style="display: flex; align-items: center;")
+                img(src="/images/voltar.png" alt="Back" style="width: 40px; height: 40px; cursor: pointer; margin-right: 10px;" onclick="history.back()")
+                h2 Formulário de Inquirição
+
+        form.w3-container(method="POST") 
+            fieldset 
+                label Nome *
+                input.w3-input.w3-round(type="text" name="Name" required) 
+                
+                label Data inicial de Produção: *
+                input.w3-input.w3-round(type="date" name="UnitDateInitial" required)
+                
+                label A data introduzida está verificada? *
+                    div(style="display: inline-block; margin-left: 10px;")
+                        input(type="radio" name="UnitDateInitialCertainty" value="true" required)
+                        label(for="datesYes") Sim
+                    div(style="display: inline-block; margin-left: 10px;")
+                        input(type="radio" name="UnitDateInitialCertainty" value="false" required)
+                        label(for="datesNo") Não
+                    br
+                    br
+
+                label Data final de Produção: *
+                input.w3-input.w3-round(type="date" name="UnitDateFinal" required)
+                
+                label A data introduzida está verificada? *
+                    div(style="display: inline-block; margin-left: 10px;")
+                        input(type="radio" name="UnitDateFinalCertainty" value="true" required)
+                        label(for="datesYes") Sim
+                    div(style="display: inline-block; margin-left: 10px;")
+                        input(type="radio" name="UnitDateFinalCertainty" value="false" required)
+                        label(for="datesNo") Não
+                    br
+                    br
+
+                label Repositório: *
+                input.w3-input.w3-round(type="text" name="Repository" required)
+                
+                label Conteúdo: *
+                input.w3-input.w3-round(type="text" name="ScopeContent" required)
+
+                label Localidade: 
+                input.w3-input.w3-round(type="text" name="Localidade")
+                
+                label Localização atual: 
+                input.w3-input.w3-round(type="text" name="PhysLoc")
+                
+                label Localização antiga: 
+                input.w3-input.w3-round(type="text" name="PreviousLoc")
+                
+                label Características físicas e requisitos técnicos:
+                input.w3-input.w3-round(type="text" name="PhysTech")
+                
+                label Inquirições relacionadas:
+                input.w3-input.w3-round(type="text" name="RelatedMaterial" placeholder="Nome: Relação - Id,Nome: Relação - Id")
+                
+                label Idioma: 
+                input.w3-input.w3-round(type="text" name="LangMaterial")
+                
+            button.w3-btn.w3-blue.w3-mb-2(style="margin-top:10px;margin-right: 10px; border-radius: 10px;",type="submit") Adicionar

@@ -1,0 +1,40 @@
+extends layout 
+
+block content 
+
+    head
+        title Login
+        link(rel="stylesheet", href="/stylesheets/auth.css")
+    body
+        .login-container
+            img(src="/images/PersonCircle.png")
+            form(id="login-form", action="/login", method="POST")
+                input(type="text", id="username", name="username", placeholder="Username", required)
+                
+                .password-container
+                    input(type="password", id="password", name="password", placeholder="Password", required)
+                    button.toggle-password(type="button", onclick="togglePasswordVisibility()")
+                        img.toggle-icon(src="/images/see.png")
+                
+                button(type="submit") Login
+            
+            .register-link-container
+                p 
+                    | Não possui uma conta? 
+                    a(href="/register", class="register-link") Registo
+
+            if error
+                p.error(style="color: red")= error
+
+        script.
+            function togglePasswordVisibility() {
+                var passwordField = document.getElementById('password');
+                var toggleButton = document.querySelector('.toggle-password');
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    toggleButton.querySelector('img').src = '/images/unsee.png'; 
+                } else {
+                    passwordField.type = 'password';
+                    toggleButton.querySelector('img').src = '/images/see.png'; 
+                }
+            }
